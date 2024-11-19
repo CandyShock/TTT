@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from main.models import Kurs
+
+
+@admin.register(Kurs)
+class KursAdmin(admin.ModelAdmin):
+    list_display = ('sub', 'id')

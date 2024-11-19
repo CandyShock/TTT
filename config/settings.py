@@ -40,9 +40,13 @@ INSTALLED_APPS = [
     'users',
     'main',
     'django_filters',
+    'rest_framework_simplejwt',
+    'drf_yasg',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -127,3 +131,28 @@ MEDIA_URl = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
 
 AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+CUR_API_URL = 'https://api.currencyapi.com'
+CUR_API_KEY = 'cur_live_NN3mvI3lcBDe5tjthGJQBeyC3sIvteKblaXS703h&currencies=RUB'
+STRIPE_API_KEY = 'sk_test_51Nw9Z2COZvuZ4fm8MPo0bI08JomotOXZMHb0D9fnAWRnhdVIe7aHethqYW70RrQV2UkKI8H7QDLbxdOlW6oV0CrW0055hfdqCl'
