@@ -17,9 +17,6 @@ def convert_currencies(rub_price):
     return usd_price
 
 
-stripe.api_key = "sk_test_51Nw9Z2COZvuZ4fm8MPo0bI08JomotOXZMHb0D9fnAWRnhdVIe7aHethqYW70RrQV2UkKI8H7QDLbxdOlW6oV0CrW0055hfdqCl"
-
-
 def create_product_course(name, description):
     '''Создание продукта в страйпе и присвоение id'''
     course = stripe.Product.create(
