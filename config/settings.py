@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'corsheaders',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -111,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -156,3 +157,23 @@ CSRF_TRUSTED_ORIGINS = [
 CUR_API_URL = 'https://api.currencyapi.com'
 CUR_API_KEY = 'cur_live_NN3mvI3lcBDe5tjthGJQBeyC3sIvteKblaXS703h&currencies=RUB'
 STRIPE_API_KEY = 'sk_test_51Nw9Z2COZvuZ4fm8MPo0bI08JomotOXZMHb0D9fnAWRnhdVIe7aHethqYW70RrQV2UkKI8H7QDLbxdOlW6oV0CrW0055hfdqCl'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# Флаг отслеживания выполнения задач
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BEAT_SCHEDULE = {
+    'check_user_login': {
+        'task': 'users.tasks.check_user_login',  # Путь к задаче
+        'schedule': timedelta(minutes=1),  # Расписание выполнения задачи (например, каждые 10 минут)
+    },
+}
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'ttestttestov@yandex.ru'
+EMAIL_HOST_PASSWORD = 'mdblabfnttxtqiqj'

@@ -10,6 +10,7 @@ from main.paginator import MyPagePagination
 from main.permissions import IsOwnerorStaff
 from main.serialaizers import KursSerialaizer, LessonSerializer, PaymentSerializer, SubscripeSerializer
 from main.servives import create_product_course, create_price, create_session
+from main.tasks import send_massage_about_update
 
 
 class KursViewSet(viewsets.ModelViewSet):
@@ -21,6 +22,11 @@ class KursViewSet(viewsets.ModelViewSet):
         course = serializer.save()
         product = create_product_course(course.name, course.text)
         course.product_id = product
+        course.save()
+
+    def perform_update(self, serializer):
+        course = serializer.save()
+        send_massage_about_update.delay(course_id=course.id)
         course.save()
 
 
@@ -50,6 +56,9 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsOwnerorStaff]
+
+    def post(self, request):
+        send_massage_about_update.delay()
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
